@@ -5,7 +5,7 @@ import { isValidObjectId, Model } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginationDto } from '../common/dto/pagination.dto';
-import { skip } from 'node:test';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PokemonService {
@@ -13,8 +13,14 @@ export class PokemonService {
   constructor(
     //injeccion de modelos en el servicio
     @InjectModel(Pokemon.name)
-    private readonly pokemonModel: Model<Pokemon>
-  ){}
+    private readonly pokemonModel: Model<Pokemon>,
+
+    private readonly configService: ConfigService
+  ){
+
+    console.log(this.configService.get('PORT'));
+    
+  }
   
   async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
